@@ -49,7 +49,7 @@
 		<nexus.staging.version>1.6.3</nexus.staging.version>
 		<mvn.src.version>2.2.1</mvn.src.version>
 		<mvn.compiler.version>3.1</mvn.compiler.version>
-		<mvn.javadoc.version>3.1</mvn.javadoc.version>
+		<mvn.javadoc.version>2.10.1</mvn.javadoc.version>
 		<mvn.surefire.version>2.7</mvn.surefire.version>
 		<sonar.mvn.version>3.5.0.1254</sonar.mvn.version>
 		<jacoco.mvn.version>0.8.1</jacoco.mvn.version>
@@ -67,7 +67,7 @@
 		<sonar.login>654734b31690785be119350b5e354a3157eca166</sonar.login>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<sonar.jacoco.reportPaths>${basedir}/target/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 	</properties>
 
 	<build>
@@ -123,8 +123,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${mvn.compiler.version}</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -145,13 +145,13 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${mvn.surefire.version}</version>
 				<configuration>
-					<argLine>@{surefireArgLine} -Xmx512m</argLine>
-					<systemProperties>
+					<argLine>-Xmx512m</argLine>
+					<systemPropertyVariables>
 						<property>
 							<name>org.jboss.weld.nonPortableMode</name>
 							<value>true</value>
 						</property>
-					</systemProperties>
+					</systemPropertyVariables>
 					<classpathDependencyExcludes>
 						<classpathDependencyExcludes>ch.qos.logback:logback-classic</classpathDependencyExcludes>
 					</classpathDependencyExcludes>
@@ -166,27 +166,16 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco.mvn.version}</version>
+				<configuration>
+					<destFile>${sonar.jacoco.reportPath}</destFile>
+					<append>true</append>
+				</configuration>
 				<executions>
 					<execution>
-						<id>pre-unit-test</id>
+						<id>agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
-						<configuration>
-							<destFile>${basedir}/target/coverage-reports/jacoco-ut.exec</destFile>
-							<propertyName>surefireArgLine</propertyName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>post-unit-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-						<configuration>
-							<dataFile>${basedir}/target/coverage-reports/jacoco-ut.exec</dataFile>
-							<outputDirectory>${basedir}/target/coverage-reports/jacoco-ut</outputDirectory>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
