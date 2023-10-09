@@ -1,21 +1,16 @@
 package com.github.ldeitos.restutil;
 
-import static java.lang.String.format;
-import static java.util.regex.Pattern.matches;
-import static org.apache.commons.collections4.CollectionUtils.collect;
-import static org.apache.commons.collections4.CollectionUtils.find;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 import java.beans.ParameterDescriptor;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Descriptor to parsed parameters obtained from {@link ParametersParser}.
@@ -29,28 +24,23 @@ public class ParamDescriptor implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Transformer<ParamDescriptor, String> TO_PARAM_NAME = new Transformer<ParamDescriptor, String>() {
-		@Override
-		public String transform(ParamDescriptor input) {
-			return input.getParamName();
-		}
-	};
+	private static final Transformer<ParamDescriptor, String> TO_PARAM_NAME = ParamDescriptor::getParamName;
 
 	private String paramName;
 
-	private List<ParamDescriptor> innerParams = new ArrayList<ParamDescriptor>();
+	private List<ParamDescriptor> innerParams = new ArrayList<>();
 
 	ParamDescriptor() {
 		super();
-		paramName = EMPTY;
+		this.paramName = StringUtils.EMPTY;
 	}
 
 	public ParamDescriptor(String paramName) {
 		super();
 
-		if (isBlank(paramName) || matches("\\W", paramName)) {
-			throw new InvalidParameterException(format("paramName [%s] must be a valid alphanumeric word.",
-			    paramName));
+		if (StringUtils.isBlank(paramName) || Pattern.matches("\\W", paramName)) {
+			throw new InvalidParameterException(String.format("paramName [%s] must be a valid alphanumeric word.",
+					paramName));
 		}
 
 		this.paramName = paramName;
@@ -61,7 +51,7 @@ public class ParamDescriptor implements Serializable {
 	 * {@link ParameterDescriptor}, or null if {@link #isSimple()}.
 	 *
 	 * @param paramName
-	 *            Name from parameter to obtain {@link ParamDescriptor}.
+	 *                  Name from parameter to obtain {@link ParamDescriptor}.
 	 *
 	 * @return Correspondent paramName {@link ParameterDescriptor}.
 	 *
@@ -69,12 +59,7 @@ public class ParamDescriptor implements Serializable {
 	 * @see #isSimple()
 	 */
 	public ParamDescriptor getInnerParam(final String paramName) {
-		return find(innerParams, new Predicate<ParamDescriptor>() {
-			@Override
-			public boolean evaluate(ParamDescriptor object) {
-				return object.getParamName().equals(paramName);
-			}
-		});
+		return CollectionUtils.find(this.innerParams, object -> object.getParamName().equals(paramName));
 	}
 
 	/**
@@ -85,44 +70,45 @@ public class ParamDescriptor implements Serializable {
 	 * @see #isSimple()
 	 */
 	public List<ParamDescriptor> getInnerParams() {
-		return innerParams;
+		return this.innerParams;
 	}
 
 	/**
 	 * @return Parameter name.
 	 */
 	public String getParamName() {
-		return paramName;
+		return this.paramName;
 	}
 
 	/**
 	 * @return True if parameter contain other parameters.
 	 */
 	public boolean isComplex() {
-		return !isSimple();
+		return !this.isSimple();
 	}
 
 	/**
 	 * @return True if parameter does not contain other parameters.
 	 */
 	public boolean isSimple() {
-		return innerParams.isEmpty();
+		return this.innerParams.isEmpty();
 	}
 
 	/**
 	 * @return True if parameter does not contain name.
 	 */
 	public boolean isRoot() {
-		return isBlank(paramName);
+		return StringUtils.isBlank(this.paramName);
 	}
 
 	@Override
 	public String toString() {
-		return isRoot() ? "root" : paramName;
+		return this.isRoot() ? "root" : this.paramName;
 	}
 
 	public String[] getInnerParamsNames() {
-		List<String> innerParamsNames = new ArrayList<String>(collect(innerParams, TO_PARAM_NAME));
+		List<String> innerParamsNames = new ArrayList<>(
+				CollectionUtils.collect(this.innerParams, ParamDescriptor.TO_PARAM_NAME));
 		return innerParamsNames.toArray(new String[innerParamsNames.size()]);
 	}
 
@@ -132,14 +118,14 @@ public class ParamDescriptor implements Serializable {
 	 * @since 1.0.CR2
 	 */
 	public String asString() {
-		StringBuilder sb = new StringBuilder(getParamName());
+		StringBuilder sb = new StringBuilder(this.getParamName());
 
-		if (isComplex()) {
-			if (!isRoot()) {
+		if (this.isComplex()) {
+			if (!this.isRoot()) {
 				sb.append("(");
 			}
 
-			Iterator<ParamDescriptor> it = innerParams.iterator();
+			Iterator<ParamDescriptor> it = this.innerParams.iterator();
 			while (it.hasNext()) {
 				ParamDescriptor param = it.next();
 				sb.append(param.asString());
@@ -148,7 +134,7 @@ public class ParamDescriptor implements Serializable {
 				}
 			}
 
-			if (!isRoot()) {
+			if (!this.isRoot()) {
 				sb.append(")");
 			}
 		}
