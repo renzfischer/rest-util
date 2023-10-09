@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.ldeitos</groupId>
 	<artifactId>rest-util</artifactId>
-	<version>1.0.CR5</version>
+	<version>1.0.CR6</version>
 	<description>Utilities to Rest applications</description>
 
 	<licenses>
@@ -43,6 +43,24 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<!-- plugins -->
+		<mvn.gpg.version>1.5</mvn.gpg.version>
+		<mvn.deploy.version>2.8.2</mvn.deploy.version>
+		<nexus.staging.version>1.6.3</nexus.staging.version>
+		<mvn.src.version>2.2.1</mvn.src.version>
+		<mvn.compiler.version>3.1</mvn.compiler.version>
+		<mvn.javadoc.version>3.1</mvn.javadoc.version>
+		<mvn.surefire.version>2.7</mvn.surefire.version>
+		<sonar.mvn.version>3.5.0.1254</sonar.mvn.version>
+		<jacoco.mvn.version>0.8.1</jacoco.mvn.version>
+
+		<!-- dependencies -->
+		<commons.lang.version>3.3.2</commons.lang.version>
+		<commons.collections.version>4.0</commons.collections.version>
+		<junit.version>4.11</junit.version>
+
+
+		<!-- sonar -->
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>ldeitos_rest-util</sonar.projectKey>
 		<sonar.organization>ldeitos-github</sonar.organization>
@@ -57,7 +75,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
+				<version>${mvn.gpg.version}</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -71,7 +89,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
+				<version>${mvn.deploy.version}</version>
 				<configuration>
 					<skip>true</skip>
 				</configuration>
@@ -79,7 +97,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
+				<version>${nexus.staging.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
@@ -90,7 +108,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>${mvn.src.version}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -103,7 +121,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>${mvn.compiler.version}</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -112,7 +130,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.1</version>
+				<version>${mvn.javadoc.version}</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -125,7 +143,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
+				<version>${mvn.surefire.version}</version>
 				<configuration>
 					<argLine>@{surefireArgLine} -Xmx512m</argLine>
 					<systemProperties>
@@ -142,12 +160,12 @@
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.5.0.1254</version>
+				<version>${sonar.mvn.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.1</version>
+				<version>${jacoco.mvn.version}</version>
 				<executions>
 					<execution>
 						<id>pre-unit-test</id>
@@ -179,19 +197,19 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.3.2</version>
+			<version>${commons.lang.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>4.0</version>
+			<version>${commons.collections.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
